@@ -1,13 +1,26 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import books from "../db/books.json";
 
 const BooksContext = createContext([{}, (s) => {}]);
 
 function BooksProvider({ children }) {
-  const [state, setState] = useState(books);
+  const initialReadingList =
+    JSON.parse(localStorage.getItem("readingList")) || [];
+  const [state, setState] = useState({
+    books: [],
+    readingList: initialReadingList,
+  });
 
   useEffect(() => {
     // grab default values
+
+    fetch("books.json")
+      .then((res) => res.json())
+      .then((data) => {
+        setState((antyState) => ({
+          ...antyState,
+          books: data.books,
+        }));
+      });
   }, []);
 
   return (
@@ -20,7 +33,24 @@ function BooksProvider({ children }) {
 function useBooks() {
   const [state, setState] = useContext(BooksContext);
 
-  return state;
+  function addBookToReadingList(book) {
+    setState((state) => {
+      const result = {
+        ...state,
+        readingList: [...state.readingList, book],
+      };
+
+      localStorage.setItem("readingList", JSON.stringify(result.readingList));
+
+      return result;
+    });
+  }
+
+  return {
+    books: state.books,
+    readingList: state.readingList,
+    addBookToReadingList,
+  };
 }
 
 export { BooksProvider, useBooks };

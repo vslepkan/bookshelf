@@ -1,6 +1,8 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import Discover from "../../pages/Discover/Discover";
+import Home from "../../pages/Home/Home";
+import ReadingList from "../../pages/ReadingList/ReadingList";
 import Navigation from "../Navigation/Navigation";
 
 function App() {
@@ -10,7 +12,7 @@ function App() {
       <div className="p-4">
         <Switch>
           <Route path="/reading-list">
-            <h2>Reading list page</h2>
+            <ReadingList />
           </Route>
           <Route path="/finished-books">
             <h2>Finished books page</h2>
@@ -20,11 +22,7 @@ function App() {
           </Route>
 
           <Route path="/">
-            <header>
-              <h1 className="text-xl font-bold text-center">
-                [Book | Movie | Game] shelf
-              </h1>
-            </header>
+            <Home />
           </Route>
         </Switch>
       </div>
